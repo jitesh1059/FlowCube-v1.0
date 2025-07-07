@@ -14,6 +14,89 @@
         rel="stylesheet">
 </head>
 
+<!-- Recent Projects Carousel -->
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const timelineData = {
+            "2010": [
+                {
+                    img: "images/history-2010.jpg",
+                    title: "Redwoods Media Becomes Vidyard",
+                    desc: "Michael Litt and Devon Galloway found Redwoods Media, the first video production company to offer video hosting, analytics, and performance guarantees."
+                },
+                {
+                    img: "images/extra-2010.jpg",
+                    title: "Early Demo Day Success",
+                    desc: "The team showcases their idea at a university startup event, gaining interest from early investors."
+                }
+            ],
+            "2011": [
+                {
+                    img: "images/history-2011.jpg",
+                    title: "Seed Funding Secured",
+                    desc: "Vidyard raises seed capital from prominent tech investors to scale their video analytics platform."
+                }
+            ],
+            "2014": [
+                {
+                    img: "images/history-2014.jpg",
+                    title: "International Expansion",
+                    desc: "Vidyard opens offices in the US and UK to support its growing international customer base."
+                }
+            ],
+            "2020": [
+                {
+                    img: "images/history-2020.jpg",
+                    title: "Video in the Remote Era",
+                    desc: "The global shift to remote work sees a spike in video usage, propelling Vidyard’s growth significantly."
+                }
+            ]
+        };
+
+        let years = Object.keys(timelineData);
+        let currentYearIndex = 0;
+        let inactivityTimer;
+
+        function showProjects(year) {
+            const container = document.getElementById("timelineDisplay");
+            container.innerHTML = timelineData[year].map(project => `<div class="project-block">
+                                    <img src="${project.img}" alt="${project.title}">
+                                    <h3>${project.title}</h3>
+                                    <p>${project.desc}</p>
+                                </div>`).join("");
+
+            document.querySelectorAll('.year-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.year-btn[data-year="${year}"]`).classList.add('active');
+        }
+
+        function advanceYear() {
+            currentYearIndex = (currentYearIndex + 1) % years.length;
+            showProjects(years[currentYearIndex]);
+        }
+
+        function resetInactivityTimer() {
+            clearTimeout(inactivityTimer);
+            inactivityTimer = setTimeout(advanceYear, 10000);
+        }
+
+        // Initial load
+        showProjects(years[currentYearIndex]);
+        resetInactivityTimer();
+
+        document.querySelectorAll('.year-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const year = btn.getAttribute('data-year');
+                currentYearIndex = years.indexOf(year);
+                showProjects(year);
+                resetInactivityTimer();
+            });
+        });
+
+        document.addEventListener('click', resetInactivityTimer);
+        document.addEventListener('keydown', resetInactivityTimer);
+    });
+</script>
+
 <body>
     <!-- Header/Navigation -->
     <header class="header">
@@ -134,6 +217,29 @@
                     <h3>Power Generators</h3>
                     <p>Reliable electric generators available for both sales and rental.</p>
                     <a href="products.html#generators" class="btn btn-primary">View Details</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recent Projects -->
+    <section class="timeline-section">
+        <div class="container">
+            <h2 class="section-title">Recent Projects</h2>
+            <p>
+                A journey of milestones, innovation, and progress. Explore how we grew year by year, expanding our
+                capabilities and global impact.
+            </p>
+            
+            <div class="timeline-content">
+                <div class="timeline-years">
+                    <button class="year-btn active" data-year="2010">2010</button>
+                    <button class="year-btn" data-year="2011">2011</button>
+                    <button class="year-btn" data-year="2014">2014</button>
+                    <button class="year-btn" data-year="2020">2020</button>
+                </div>
+                <div class="timeline-display" id="timelineDisplay">
+                    <!-- Dynamic content will be injected here -->
                 </div>
             </div>
         </div>
